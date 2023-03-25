@@ -37,19 +37,20 @@ def test_data(mem_cache):
             e['Value'].set_from_value(character(0x41 + i))
             e['Expires'].set_from_value(
                 iso.TimePoint.from_unix_time(time.time() + 10 * i))
+            e['LIBOR'].set_from_value(2.001)
             collection.insert_entity(e)
 
 
-def test_model():
-    """Read and write some key value pairs"""
-    doc = load_metadata()
-    InMemoryEntityContainer(doc.root.DataServices['MemCacheSchema.MemCache'])
-    mem_cache = doc.root.DataServices['MemCacheSchema.MemCache.Rates']
-    test_data(mem_cache)
-    with mem_cache.open() as collection:
-        for e in collection.itervalues():
-            output("%s: %s (expires %s)\n" %
-                   (e['Key'].value, e['Value'].value, str(e['Expires'].value)))
+# def test_model():
+#     """Read and write some key value pairs"""
+#     doc = load_metadata()
+#     InMemoryEntityContainer(doc.root.DataServices['MemCacheSchema.MemCache'])
+#     mem_cache = doc.root.DataServices['MemCacheSchema.MemCache.Rates']
+#     test_data(mem_cache)
+#     with mem_cache.open() as collection:
+#         for e in collection.itervalues():
+#             output("%s: %s (expires %s)\n" %
+#                    (e['Key'].value, e['Value'].value, str(e['Expires'].value)))
 
 
 def run_cache_server():
@@ -60,29 +61,6 @@ def run_cache_server():
     server.serve_forever()
 
 
-def cleanup_forever(mem_cache):
-    """Runs a loop continuously cleaning up expired items"""
-    now = edm.DateTimeValue()
-    expires = core.PropertyExpression("Expires")
-    t = core.LiteralExpression(now)
-    filter = core.BinaryExpression(core.Operator.lt)
-    filter.operands.append(expires)
-    filter.operands.append(t)
-    test_data(mem_cache)
-    while True:
-        now.set_from_value(iso.TimePoint.from_now_utc())
-        logging.info("Cleanup thread running at %s", str(now.value))
-        # with mem_cache.open() as cacheEntries:
-        #     cacheEntries.set_filter(filter)
-        #     expired_list = list(cacheEntries)
-        #     if expired_list:
-        #         logging.info("Cleaning %i cache entries", len(expired_list))
-        #         for expired in expired_list:
-        #             del cacheEntries[expired]
-        #     cacheEntries.set_filter(None)
-        #     logging.info(
-        #         "Cleanup complete, %i cache entries remain", len(cacheEntries))
-        time.sleep(CLEANUP_SLEEP)
 
 
 def main():

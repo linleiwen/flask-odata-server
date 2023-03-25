@@ -10,11 +10,14 @@
                 <Key>
                     <PropertyRef Name="Key"/>
                 </Key>
+                <!-- reference: https://help.sap.com/docs/SAP_HANA_PLATFORM/4505d0bdaf4948449b7f7379d24d0f0d/db41333d80e7490087224e9d6a0ca9b5.html -->
                 <Property Name="Key" Type="Edm.String" Nullable="false" MaxLength="256"
-                    Unicode="true" FixedLength="false"/>
+                          Unicode="true" FixedLength="false"/>
                 <Property Name="Value" Type="Edm.String" Nullable="false" MaxLength="8192"
                 	Unicode="true" FixedLength="false"/>
                 <Property Name="Expires" Type="Edm.DateTime" Nullable="false"
+                    Precision="3"/>
+                <Property Name="LIBOR" Type="Edm.Single" Nullable="false"
                     Precision="3"/>
             </EntityType>
         </Schema>
