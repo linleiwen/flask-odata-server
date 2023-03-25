@@ -4,7 +4,7 @@
     <edmx:DataServices m:DataServiceVersion="2.0">
         <Schema Namespace="MemCacheSchema" xmlns="http://schemas.microsoft.com/ado/2006/04/edm">
             <EntityContainer Name="MemCache" m:IsDefaultEntityContainer="true">
-                <EntitySet Name="KeyValuePairs" EntityType="MemCacheSchema.KeyValuePair"/>
+                <EntitySet Name="Rates" EntityType="MemCacheSchema.KeyValuePair"/>
             </EntityContainer>
             <EntityType Name="KeyValuePair">
                 <Key>

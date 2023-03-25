@@ -44,7 +44,7 @@ def test_model():
     """Read and write some key value pairs"""
     doc = load_metadata()
     InMemoryEntityContainer(doc.root.DataServices['MemCacheSchema.MemCache'])
-    mem_cache = doc.root.DataServices['MemCacheSchema.MemCache.KeyValuePairs']
+    mem_cache = doc.root.DataServices['MemCacheSchema.MemCache.Rates']
     test_data(mem_cache)
     with mem_cache.open() as collection:
         for e in collection.itervalues():
@@ -94,12 +94,8 @@ def main():
     # The server is now ready to serve forever
     global cache_app
     cache_app = server
-    t = threading.Thread(target=run_cache_server)
-    t.setDaemon(True)
-    t.start()
-    logging.info("MemCache starting HTTP server on %s" % SERVICE_ROOT)
-    cleanup_forever(
-        doc.root.DataServices['MemCacheSchema.MemCache.KeyValuePairs'])
+    test_data(doc.root.DataServices['MemCacheSchema.MemCache.Rates'])
+    run_cache_server()
 
 
 if __name__ == '__main__':
