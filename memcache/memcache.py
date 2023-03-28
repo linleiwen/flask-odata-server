@@ -1,16 +1,11 @@
 #! /usr/bin/env python
 """Creates an OData in-memory cache of key value pairs"""
 import logging
-import threading
-import time
 from wsgiref.simple_server import make_server
 from pyslet import iso8601 as iso
 from pyslet.odata2 import metadata as edmx
-from pyslet.odata2 import core as core
-from pyslet.odata2 import csdl as edm
 from pyslet.odata2.memds import InMemoryEntityContainer
 from pyslet.odata2.server import Server
-from pyslet.py2 import character, output, range3
 from lib.utils import read_csv_to_df, datetime_to_unix_time
 from pathlib import Path
 
