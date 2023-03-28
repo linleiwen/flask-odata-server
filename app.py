@@ -6,18 +6,19 @@ import xml.etree.cElementTree as ET
 from pyslet.odata2.server import Server
 from wsgiref.simple_server import make_server
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
-
+from memcache.memcache import main
+from werkzeug.exceptions import NotFound
 app = Flask(__name__)
-
-application = DispatcherMiddleware(app, {
-    '/odata.svc': "/odata.svc"
+app_2 = main('http://localhost:8080/odata.svc/')
+application = DispatcherMiddleware(NotFound, {
+    '': app
 })
 
 # get from http://localhost:8080/Rates('25')?$format=json
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    return home
+    return "home page"
 
 def run_cache_server(cache_app):
     SERVICE_PORT = 8080
@@ -29,4 +30,4 @@ def run_cache_server(cache_app):
 
 if __name__ == '__main__':
     #app.run(debug=True)
-    run_cache_server(app)
+    run_cache_server(application)
