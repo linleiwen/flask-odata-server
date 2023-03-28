@@ -5,15 +5,15 @@ from flask import make_response, jsonify
 import xml.etree.cElementTree as ET
 from pyslet.odata2.server import Server
 from wsgiref.simple_server import make_server
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 app = Flask(__name__)
 
-# get from http://localhost:8080/Rates('25')?$format=json
-@app.route('/odata.svc/<path:odata_path>', methods=['GET', 'POST'])
-def odata(odata_path):
-    return "abc"
-    #headers = dict(r_forward.headers)
+application = DispatcherMiddleware(app, {
+    '/odata.svc': "/odata.svc"
+})
 
+# get from http://localhost:8080/Rates('25')?$format=json
 
 @app.route('/', methods=['GET', 'POST'])
 def home():

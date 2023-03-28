@@ -42,9 +42,10 @@ def load_data(mem_cache):
 
 
 
-def run_cache_server():
+def run_cache_server(cache_app):
     """Starts the web server running"""
-    server = make_server('', SERVICE_PORT, cache_app)
+    #server = make_server('', SERVICE_PORT, cache_app)
+    server = make_server('localhost', 8080, cache_app)
     logging.info("Starting HTTP server on port %i..." % SERVICE_PORT)
     # Respond to requests until process is killed
     server.serve_forever()
@@ -52,19 +53,17 @@ def run_cache_server():
 
 
 
-def main():
+def main(service_root):
     """Executed when we are launched"""
     doc = load_metadata()
     InMemoryEntityContainer(doc.root.DataServices['MemCacheSchema.MemCache'])
-    server = Server(serviceRoot=SERVICE_ROOT)
+    server = Server(serviceRoot=service_root)
     server.set_model(doc)
     # The server is now ready to serve forever
-    global cache_app
-    cache_app = server
     load_data(doc.root.DataServices['MemCacheSchema.MemCache.Rates'])
-    run_cache_server()
+    run_cache_server(server)
 
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    main()
+    main(SERVICE_ROOT)
