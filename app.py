@@ -6,6 +6,7 @@ import xml.etree.cElementTree as ET
 
 app = Flask(__name__)
 
+# get from http://localhost:8080/Rates('25')?$format=json
 @app.route('/odata')
 def odata():
     #headers = dict(r_forward.headers)

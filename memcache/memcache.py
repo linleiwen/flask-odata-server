@@ -11,7 +11,7 @@ from pyslet.odata2 import csdl as edm
 from pyslet.odata2.memds import InMemoryEntityContainer
 from pyslet.odata2.server import Server
 from pyslet.py2 import character, output, range3
-
+from lib.utils import read_csv_to_df, datetime_to_unix_time
 
 SERVICE_PORT = 8080
 SERVICE_ROOT = "http://localhost:%i/" % SERVICE_PORT
@@ -29,28 +29,17 @@ def load_metadata():
     return doc
 
 
-def test_data(mem_cache):
+def load_data(mem_cache):
+    df_data = read_csv_to_df("../mock_data/sample_libor.csv")
     with mem_cache.open() as collection:
-        for i in range3(26):
+        for index, row in df_data.iterrows():
             e = collection.new_entity()
-            e.set_key(str(i))
-            e['Value'].set_from_value(character(0x41 + i))
-            e['Expires'].set_from_value(
-                iso.TimePoint.from_unix_time(time.time() + 10 * i))
-            e['LIBOR'].set_from_value(2.001)
+            e.set_key(str(index))
+            e['Date'].set_from_value(
+                iso.TimePoint.from_unix_time(datetime_to_unix_time(row['Date'])))
+            e['Libor'].set_from_value(row['Libor'])
             collection.insert_entity(e)
 
-
-# def test_model():
-#     """Read and write some key value pairs"""
-#     doc = load_metadata()
-#     InMemoryEntityContainer(doc.root.DataServices['MemCacheSchema.MemCache'])
-#     mem_cache = doc.root.DataServices['MemCacheSchema.MemCache.Rates']
-#     test_data(mem_cache)
-#     with mem_cache.open() as collection:
-#         for e in collection.itervalues():
-#             output("%s: %s (expires %s)\n" %
-#                    (e['Key'].value, e['Value'].value, str(e['Expires'].value)))
 
 
 def run_cache_server():
@@ -72,7 +61,7 @@ def main():
     # The server is now ready to serve forever
     global cache_app
     cache_app = server
-    test_data(doc.root.DataServices['MemCacheSchema.MemCache.Rates'])
+    load_data(doc.root.DataServices['MemCacheSchema.MemCache.Rates'])
     run_cache_server()
 
 
