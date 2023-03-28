@@ -8,21 +8,23 @@ from wsgiref.simple_server import make_server
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from memcache.memcache import main
 from werkzeug.exceptions import NotFound
-app = Flask(__name__)
-app_2 = main('http://localhost:8080/odata.svc/')
-application = DispatcherMiddleware(NotFound, {
-    '': app
+app = Flask(__name__) # default flask application
+app_2 = main('http://localhost:8080/odata.svc/') # this one is the schema base, we may need to make it dynamic
+application = DispatcherMiddleware(app, {
+    '/odata.svc': app_2 # second wsgi application, it can be pyslet server
 })
+# get from http://localhost:8080/odata.svc/
+# get from http://localhost:8080/odata.svc/Rates('1')?$format=json
+# get from http://localhost:8080/odata.svc/Rates
 
 # get from http://localhost:8080/Rates('25')?$format=json
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    return "home page"
+    return "Home page"
 
 def run_cache_server(cache_app):
     SERVICE_PORT = 8080
-    SERVICE_ROOT = "http://localhost:%i/" % SERVICE_PORT
     """Starts the web server running"""
     server = make_server('localhost', port=8080, app=cache_app)
     # Respond to requests until process is killed
