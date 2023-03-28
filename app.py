@@ -3,41 +3,30 @@ from flask import Flask, jsonify
 from odata_generator import xml_string, r_forward_data
 from flask import make_response, jsonify
 import xml.etree.cElementTree as ET
+from pyslet.odata2.server import Server
+from wsgiref.simple_server import make_server
 
 app = Flask(__name__)
 
 # get from http://localhost:8080/Rates('25')?$format=json
-@app.route('/odata')
-def odata():
+@app.route('/odata.svc/<path:odata_path>', methods=['GET', 'POST'])
+def odata(odata_path):
+    return "abc"
     #headers = dict(r_forward.headers)
-    response = make_response(r_forward_data.text)
-    headers = {}
-    headers["Content-Type"] = "application/json; odata.metadata=minimal"
-    headers["OData-Version"] = "4.0"
-    headers["OData-MaxVersion"] = "4.0"
-    # headers[] =
-    # headers[] =
-    # headers[] =
-    # headers[] =
-    for key, value in headers.items():
-        response.headers[key] = value
-    return response
 
-@app.route('/meta')
-def odata():
-    #headers = dict(r_forward.headers)
-    response = make_response(r_forward_data.text)
-    headers = {}
-    headers["Content-Type"] = "application/json; odata.metadata=minimal"
-    headers["OData-Version"] = "4.0"
-    headers["OData-MaxVersion"] = "4.0"
-    # headers[] =
-    # headers[] =
-    # headers[] =
-    # headers[] =
-    for key, value in headers.items():
-        response.headers[key] = value
-    return response
+
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    return home
+
+def run_cache_server(cache_app):
+    SERVICE_PORT = 8080
+    SERVICE_ROOT = "http://localhost:%i/" % SERVICE_PORT
+    """Starts the web server running"""
+    server = make_server('localhost', port=8080, app=cache_app)
+    # Respond to requests until process is killed
+    server.serve_forever()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    #app.run(debug=True)
+    run_cache_server(app)
