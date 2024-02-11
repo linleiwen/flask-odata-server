@@ -30,7 +30,7 @@ To get started with the Flask OData Server, you'll need Python installed on your
    ```
 3. Install the required dependencies:
    ```
-   pip install -r requirements.txt
+   conda install environment.yml
    ```
 4. Start the server:
    ```
