@@ -2,7 +2,7 @@
   Flask OData Server<br/>
 </h2>
 <div align="center">
-  <img alt="Demo" src="./images/pyOdata.png" />
+  <img alt="Demo" src="./images/pyOdata.jpg" />
 </div>
 <br/>
 <center>
