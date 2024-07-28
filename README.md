@@ -1,5 +1,16 @@
+<h2 align="center">
+  Flask OData Server<br/>
+</h2>
+<div align="center">
+  <img alt="Demo" src="./Images/pyOdata.png" />
+</div>
+<br/>
+<center>
+</center>
 
-# Flask OData Server
+**Author**: Max (Leiwen) Lin  
+**GitHub URL**: [flask-odata-server](https://github.com/linleiwen/flask-odata-server)
+
 
 ## Introduction
 
